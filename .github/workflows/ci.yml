@@ -1,0 +1,49 @@
+# Название вашего "бота" (отобразится в GitHub)
+name: Backend CI (Test and Lint)
+
+# Условие запуска: "Запускайся, когда я делаю 'push' в ветку 'main'"
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Название "работы"
+  test-and-lint:
+    # "Бот" будет работать на стандартном сервере Linux
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. "Бот" скачивает ваш код из репозитория
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    # 2. "Бот" устанавливает Python
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        # (GitHub не знает '3.14', поэтому используем '3.12' 
+        # или '3.11' — это безопасно и совместимо)
+        python-version: '3.12'
+
+    # 3. "Бот" устанавливает ваши библиотеки (используя ваш файл!)
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # Он найдет 'requirements.txt' в папке 'backend'
+        pip install -r backend/requirements.txt
+    
+    # 4. "Бот" запускает Ruff (Статический анализ)
+    - name: Run Ruff
+      run: |
+        # Переходим в папку, чтобы Ruff нашел настройки
+        cd backend
+        ruff check .
+
+    # 5. "Бот" запускает PyTest (Тесты)
+    - name: Run PyTests
+      run: |
+        # Переходим в папку, чтобы PyTest нашел тесты
+        cd backend
+        pytest
