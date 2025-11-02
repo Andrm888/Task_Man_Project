@@ -1,0 +1,16 @@
+# Говорим, что это секция для "Линтера" (проверки)
+[lint]
+
+# Указываем Ruff, какие типы ошибок искать (F=Pyflakes, E=Error, W=Warning)
+select = ["E", "F", "W"]
+
+# --- ВОТ ФИКС ---
+# "Игнорируй ошибки ТОЛЬКО в этих файлах"
+# (Теперь это вложено в [lint], как и должно быть)
+[lint.per-file-ignores]
+"main.py" = ["F401"]
+"test_main.py" = ["F401"]
+"test_crud.py" = ["F401", "F811"] # F811 - Redefinition
+"test_models.py" = ["F401"]
+"models.py" = ["F401"]
+
