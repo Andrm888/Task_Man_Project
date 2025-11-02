@@ -1,4 +1,3 @@
-import pytest
 from sqlalchemy import create_engine, inspect
 
 # Импортируем 'Base' из нашего файла
@@ -18,11 +17,6 @@ def test_tasks_table_is_created():
     фейковой базе данных.
     Он не использует FastAPI или TestClient.
     """
-
-    # --- Шаг 1: "Показываем" Base наши модели ---
-    # Мы импортируем models.py ЗДЕСЬ, чтобы
-    # класс Task(Base) "зарегистрировался" в Base.
-    import models 
 
     # --- Шаг 2: Даем команду "построить" таблицы ---
     Base.metadata.create_all(bind=engine)

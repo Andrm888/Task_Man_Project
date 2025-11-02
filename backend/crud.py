@@ -38,7 +38,6 @@ def create_task(db: Session, task: schemas.TaskCreate):
 # 4. Функция для ОБНОВЛЕНИЯ задачи
 #
 def update_task(db: Session, task_id: int, task: schemas.TaskUpdate):
-    
     db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
     
     if db_task:

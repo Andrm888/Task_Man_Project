@@ -1,10 +1,8 @@
-import pytest
 from sqlalchemy import create_engine, inspect
-from sqlalchemy.orm import sessionmaker
 
 # --- ИМПОРТИРУЕМ "ЧЕРТЕЖ" И "ПРОРАБА" ---
 from database import Base
-from models import Task  # <-- Мы явно импортируем нашу модель
+from models import Task  # noqa: F401
 
 # --- 1. Настройка "фейковой" БД (в памяти) ---
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"

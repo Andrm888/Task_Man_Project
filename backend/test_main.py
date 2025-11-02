@@ -9,7 +9,6 @@ from main import app, get_db
 # Нам нужна Base из твоего файла database.py, чтобы создать таблицы
 from database import Base 
 # Нам нужны 'models', чтобы "зарегистрировать" таблицы в 'Base'
-import models
 
 # -------------------------------------------------------------------
 # 1. НАСТРОЙКА ТЕСТОВОЙ БАЗЫ ДАННЫХ
@@ -49,9 +48,7 @@ app.dependency_overrides[get_db] = override_get_db
 
 @pytest.fixture(scope="function")
 def client():
-    # Перед каждым тестом (scope="function"):
-    # 1. "Регистрируем" модели (фикс)
-    import models
+
     # 2. Создаем ВСЕ таблицы в нашей пустой БД в памяти
     Base.metadata.create_all(bind=engine)
     

@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 #
 # Импортируем наши модули напрямую
 #
-import models
+
 import schemas
 import crud
 from database import SessionLocal, engine, Base 
