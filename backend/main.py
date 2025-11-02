@@ -8,7 +8,7 @@ from typing import List
 
 import schemas
 import crud
-from database import SessionLocal, engine, Base 
+from database import SessionLocal
 
 
 app = FastAPI()

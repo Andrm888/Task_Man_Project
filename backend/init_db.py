@@ -3,7 +3,7 @@
 # "настоящих" таблиц в "настоящей" (PostgreSQL) базе.
 #
 from database import engine, Base
-import models  # <-- "Магический" импорт, "знакомит" Base с Task
+import models  # noqa: F401
 
 print("Подключаемся к PostgreSQL...")
 print("Создаем таблицы (если их еще нет)...")
@@ -17,5 +17,5 @@ try:
     
 except Exception as e:
     print("\n--- ОШИБКА! ---")
-    print(f"Не удалось создать таблицы. Проверьте 'DATABASE_URL' в database.py (особенно пароль!)")
+    print("Не удалось создать таблицы. Проверьте 'DATABASE_URL' в database.py (особенно пароль!)")
     print(f"Ошибка: {e}")
