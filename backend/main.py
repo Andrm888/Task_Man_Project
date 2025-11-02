@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List 
-from contextlib import asynccontextmanager
+
 #
 # Импортируем наши модули напрямую
 #
@@ -10,15 +10,8 @@ import schemas
 import crud
 from database import SessionLocal, engine, Base 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Этот код выполнится ОДИН РАЗ при запуске сервера
-    print("Сервер запускается, создаем таблицы...")
-    Base.metadata.create_all(bind=engine)
-    yield
-    # Этот код выполнится при остановке сервера (нам не нужно)
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 #
 # "Зависимость" (Dependency)

@@ -18,6 +18,11 @@ def test_tasks_table_is_created():
     Он не использует FastAPI или TestClient.
     """
 
+    # --- Шаг 1: "Показываем" Base наши модели ---
+    # Мы импортируем models.py ЗДЕСЬ, чтобы
+    # класс Task(Base) "зарегистрировался" в Base.
+    import models # noqa: F401
+
     # --- Шаг 2: Даем команду "построить" таблицы ---
     Base.metadata.create_all(bind=engine)
 
