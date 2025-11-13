@@ -1,7 +1,6 @@
-# Название вашего "бота" (отобразится в GitHub)
-name: Backend CI (Test and Lint)
+name: Backend CI
 
-# Условие запуска: "Запускайся, когда я делаю 'push' в ветку 'main'"
+# Запускать на каждый 'push' в ветку 'main'
 on:
   push:
     branches: [ "main" ]
@@ -9,13 +8,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Название "работы"
   test-and-lint:
-    # "Бот" будет работать на стандартном сервере Linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Робот будет работать на Linux
 
     steps:
-    # 1. "Бот" скачивает ваш код из репозитория
+    # 1. "Бот" скачивает ваш код
     - name: Check out code
       uses: actions/checkout@v4
 
@@ -23,27 +20,35 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        # (GitHub не знает '3.14', поэтому используем '3.12' 
-        # или '3.11' — это безопасно и совместимо)
-        python-version: '3.12'
+        python-version: '3.11' # (укажите вашу версию Python, если она другая)
 
-    # 3. "Бот" устанавливает ваши библиотеки (используя ваш файл!)
+    # 3. "Бот" устанавливает ваши библиотеки
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Он найдет 'requirements.txt' в папке 'backend'
         pip install -r backend/requirements.txt
+        # Убедимся, что 'бот' тоже имеет 'pytest-cov'
+        pip install pytest-cov 
     
     # 4. "Бот" запускает Ruff (Статический анализ)
     - name: Run Ruff
       run: |
-        # Переходим в папку, чтобы Ruff нашел настройки
         cd backend
         ruff check .
 
     # 5. "Бот" запускает PyTest (Тесты)
     - name: Run PyTests
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |
-        # Переходим в папку, чтобы PyTest нашел тесты
         cd backend
         pytest
+        
+    # --- 6. (НОВЫЙ ШАГ) "Бот" запускает Тесты с Покрытием ---
+    - name: Run PyTests with Coverage
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      run: |
+        cd backend
+        # Запускаем pytest с флагом --cov
+        pytest --cov=.
