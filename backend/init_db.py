@@ -1,7 +1,5 @@
-#
-# Это одноразовый скрипт для создания 
-# "настоящих" таблиц в "настоящей" (PostgreSQL) базе.
-#
+# Это одноразовый скрипт для создания таблиц 
+
 from database import engine, Base
 import models  # noqa: F401
 
@@ -9,8 +7,6 @@ print("Подключаемся к PostgreSQL...")
 print("Создаем таблицы (если их еще нет)...")
 
 try:
-    # "Прораб" (Base) "видит" 'models.Task' 
-    # и создает таблицу 'tasks' в PostgreSQL
     Base.metadata.create_all(bind=engine)
     
     print("Готово! Таблицы успешно созданы в PostgreSQL.")

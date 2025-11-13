@@ -81,10 +81,7 @@ def test_create_task(client):
     assert data["title"] == "Test Task"
     assert data["description"] == "Test Description"
     
-    # --- ИСПРАВЛЕНО ---
-    # Мы проверяем 'status', а не 'is_completed'
     assert data["status"] == "todo" 
-    # --- КОНЕЦ ИСПРАВЛЕНИЯ ---
     
     assert "id" in data
     assert data["id"] == 1 
@@ -139,15 +136,11 @@ def test_update_task(client):
     )
     task_id = create_response.json()["id"]
     
-    # 2. Обновляем ее
-    # --- ИСПРАВЛЕНО ---
-    # Мы отправляем 'status', а не 'is_completed'
     update_data = {
         "title": "New Title",
         "description": "New Desc",
         "status": "done" 
     }
-    # --- КОНЕЦ ИСПРАВЛЕНИЯ ---
     
     response = client.put(f"/tasks/{task_id}", json=update_data)
     
@@ -156,10 +149,7 @@ def test_update_task(client):
     assert data["title"] == "New Title"
     assert data["description"] == "New Desc"
     
-    # --- ИСПРАВЛЕНО ---
-    # Мы проверяем 'status'
     assert data["status"] == "done"
-    # --- КОНЕЦ ИСПРАВЛЕНИЯ ---
 
 def test_update_task_not_found(client):
     """Тестируем обновление задачи, которой не существует (404)"""

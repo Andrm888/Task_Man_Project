@@ -1,6 +1,4 @@
 from sqlalchemy import create_engine, inspect
-
-# --- ИМПОРТИРУЕМ "ЧЕРТЕЖ" И "ПРОРАБА" ---
 from database import Base
 from models import Task  # noqa: F401
 
@@ -16,16 +14,8 @@ def test_task_model_creates_table_correctly():
     нужными колонками в "фейковой" БД.
     """
     
-    # --- Шаг 1: Даем команду "построить" ---
-    #
-    # "Прораб" (Base) УЖЕ "знает" о 'Task',
-    # потому что мы импортировали 'from models import Task' вверху.
-    #
     Base.metadata.create_all(bind=engine)
     
-    # --- Шаг 2: Создаем "инспектора" ---
-    # "Инспектор" "посмотрит" внутрь фейковой БД
-    # и скажет нам, что он там видит.
     inspector = inspect(engine)
     
     # --- Шаг 3: Проверяем, что таблица 'tasks' существует ---

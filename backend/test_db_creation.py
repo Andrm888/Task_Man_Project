@@ -1,15 +1,10 @@
 from sqlalchemy import create_engine, inspect
-
-# Импортируем 'Base' из нашего файла
 from database import Base
 
 # Настраиваем "фейковую" БД в памяти
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
-#
-# Наш ОЧЕНЬ ПРОСТОЙ тест
-#
 def test_tasks_table_is_created():
     """
     Этот тест проверяет только ОДНУ вещь:

@@ -3,21 +3,12 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 
-#
-# 1. Функция для ПОЛУЧЕНИЯ ОДНОЙ задачи по ID
-#
 def get_task(db: Session, task_id: int):
     return db.query(models.Task).filter(models.Task.id == task_id).first()
 
-#
-# 2. Функция для ПОЛУЧЕНИЯ СПИСКА всех задач
-#
 def get_tasks(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Task).offset(skip).limit(limit).all()
 
-#
-# 3. Функция для СОЗДАНИЯ новой задачи
-#
 def create_task(db: Session, task: schemas.TaskCreate):
     # 1. Создаем ОБЪЕКТ SQLAlchemy
     db_task = models.Task(**task.model_dump())
