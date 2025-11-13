@@ -1,0 +1,53 @@
+@startuml
+' --- Налаштування ---
+left to right direction
+skinparam packageStyle rectangle
+
+' --- Актор ---
+' Це наш єдиний користувач
+actor "Користувач" as User
+
+' --- Система (Прямокутник) ---
+rectangle "Система: Task Manager" {
+  
+  ' --- Рівень 1: Основні CRUD ---
+  ' Це головні функції, які бачить користувач
+  usecase "Створити Завдання" as UC_Create
+  usecase "Переглянути Завдання" as UC_Read
+  usecase "Оновити Завдання" as UC_Update
+  usecase "Видалити Завдання" as UC_Delete
+
+  ' --- Рівень 2: Декомпозиція ---
+  ' Розбиваємо "Переглянути Завдання" на два окремі випадки
+  usecase "Отримати список завдань" as UC_Read_List
+  usecase "Отримати одне завдання" as UC_Read_One
+
+  ' --- Рівень 3: Include / Extend ---
+  ' Додаткові прецеденти, які є частиною інших
+  usecase "Валідація вхідних даних" as UC_Validate
+  usecase "Змінити статус завдання" as UC_Update_Status
+  
+  ' --- Зв'язки ---
+  ' Користувач взаємодіє з 4-ма основними функціями
+  User -- UC_Create
+  User -- UC_Read
+  User -- UC_Update
+  User -- UC_Delete
+
+  ' Декомпозиція "Переглянути Завдання"
+  ' (Відношення "узагальнення" - стрілка показує на батька)
+  UC_Read <|-- UC_Read_List
+  UC_Read <|-- UC_Read_One
+  
+  ' Включення (Include)
+  ' Валідація ОБОВ'ЯЗКОВО викликається при створенні або оновленні
+  ' (Відповідає NFR-003)
+  UC_Create ..> UC_Validate : <<include>>
+  UC_Update ..> UC_Validate : <<include>>
+  
+  ' Розширення (Extend)
+  ' Зміна статусу - це особливий, опціональний випадок "Оновити Завдання"
+  ' (Відповідає FR-005)
+  UC_Update_Status .> UC_Update : <<extend>>
+}
+@enduml

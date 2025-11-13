@@ -1,0 +1,60 @@
+@startuml
+' --- Налаштування ---
+skinparam classAttributeIconSize 0
+hide emptymembers
+skinparam linetype ortho
+
+' --- Класи (Моделі БД) ---
+package "Модуль: models.py" {
+  class "Task (models.Task)" as Model_Task {
+    + id: int (PK)
+    + title: str
+    + description: str
+    + status: str
+  }
+}
+
+' --- Класи (Схеми Pydantic) ---
+package "Модуль: schemas.py" {
+  class "TaskBase (Pydantic)" as Schema_Base {
+    + title: str
+    + description: str | None
+  }
+  
+  class "TaskCreate (Pydantic)" as Schema_Create {
+  }
+  
+  class "TaskUpdate (Pydantic)" as Schema_Update {
+    + title: str | None
+    + description: str | None
+    + status: str | None
+  }
+  
+  class "Task (Pydantic)" as Schema_Read {
+    + id: int
+    + status: str
+  }
+}
+
+' --- Класи (Логіка) ---
+package "Модуль: crud.py" {
+  class "CRUD" as CRUD_Module {
+    + get_task(db, id)
+    + get_tasks(db)
+    + create_task(db, task_schema)
+    + update_task(db, id, task_schema)
+    + delete_task(db, id)
+  }
+}
+
+' --- Зв'язки ---
+' Схеми "Create" та "Read" наслідують поля від "Base"
+Schema_Base <|-- Schema_Create
+Schema_Base <|-- Schema_Read
+
+' Модуль CRUD "використовує" Модель, і "приймає/повертає" Схеми
+CRUD_Module .> Model_Task : "Використовує (models.Task)"
+CRUD_Module .> Schema_Create : "Приймає (schemas.TaskCreate)"
+CRUD_Module .> Schema_Update : "Приймає (schemas.TaskUpdate)"
+CRUD_Module .> Schema_Read : "Повертає (schemas.Task)"
+@enduml

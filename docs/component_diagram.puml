@@ -1,0 +1,26 @@
+@startuml
+' --- Налаштування ---
+top to bottom direction
+skinparam rectangle {
+  backgroundColor<<Frontend>> LightSkyBlue
+  backgroundColor<<Backend>> LightGreen
+  backgroundColor<<Database>> LightYellow
+}
+skinparam componentStyle uml2
+
+' --- Компоненти ---
+[**Веб-браузер**\n(React / Vercel)] as Frontend <<Frontend>>
+[**API Сервер**\n(FastAPI / Render)] as Backend <<Backend>>
+[**База Даних**\n(PostgreSQL / Supabase)] as Database <<Database>>
+
+' --- Інтерфейси ---
+() "HTTPS (JSON API)" as API_Interface
+() "SQL" as DB_Interface
+
+' --- Зв'язки ---
+Frontend -down-> API_Interface : "HTTP Запити (GET, POST, PUT, DELETE)"
+API_Interface -down- Backend
+
+Backend -down-> DB_Interface : "SQL Запити (SELECT, INSERT, UPDATE)"
+DB_Interface -down- Database
+@enduml
