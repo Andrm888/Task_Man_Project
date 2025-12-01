@@ -1,26 +1,75 @@
 @startuml
 ' --- Налаштування ---
-top to bottom direction
-skinparam rectangle {
-  backgroundColor<<Frontend>> LightSkyBlue
-  backgroundColor<<Backend>> LightGreen
-  backgroundColor<<Database>> LightYellow
+skinparam classAttributeIconSize 0
+hide emptymembers
+skinparam linetype ortho
+
+' --- Enum (Новий клас) ---
+package "Модуль: models.py" {
+  enum "TaskStatus (Enum)" as Enum_Status {
+    TODO = "todo"
+    IN_PROGRESS = "in_progress"
+    DONE = "done"
+  }
+
+  class "Task (SQLAlchemy Model)" as Model_Task {
+    __tablename__ = "tasks"
+    + id: int (PK)
+    + title: str
+    + description: str
+    + status: TaskStatus
+    + created_at: datetime
+    + updated_at: datetime
+  }
 }
-skinparam componentStyle uml2
 
-' --- Компоненти ---
-[**Веб-браузер**\n(React / Vercel)] as Frontend <<Frontend>>
-[**API Сервер**\n(FastAPI / Render)] as Backend <<Backend>>
-[**База Даних**\n(PostgreSQL / Supabase)] as Database <<Database>>
+' --- Схеми Pydantic ---
+package "Модуль: schemas.py" {
+  class "TaskBase" as Schema_Base {
+    + title: str
+    + description: str | None
+  }
+  
+  class "TaskCreate" as Schema_Create {
+    (успадковує поля Base)
+  }
+  
+  class "TaskUpdate" as Schema_Update {
+    + title: str | None
+    + description: str | None
+    + status: TaskStatus | None
+  }
+  
+  class "Task (Response)" as Schema_Read {
+    + id: int
+    + status: TaskStatus
+    + created_at: datetime
+    + updated_at: datetime
+  }
+}
 
-' --- Інтерфейси ---
-() "HTTPS (JSON API)" as API_Interface
-() "SQL" as DB_Interface
+' --- Логіка ---
+package "Модуль: crud.py" {
+  class "CRUD Operations" as CRUD_Module {
+    + get_task(db, id)
+    + get_tasks(db)
+    + create_task(db, task_schema)
+    + update_task(db, id, task_schema)
+    + delete_task(db, id)
+  }
+}
 
 ' --- Зв'язки ---
-Frontend -down-> API_Interface : "HTTP Запити (GET, POST, PUT, DELETE)"
-API_Interface -down- Backend
+Model_Task .up.> Enum_Status : "Використовує"
+Schema_Update .up.> Enum_Status : "Використовує"
+Schema_Read .up.> Enum_Status : "Використовує"
 
-Backend -down-> DB_Interface : "SQL Запити (SELECT, INSERT, UPDATE)"
-DB_Interface -down- Database
+Schema_Base <|-- Schema_Create
+Schema_Base <|-- Schema_Read
+
+CRUD_Module .> Model_Task : "Маніпулює"
+CRUD_Module .> Schema_Create : "Приймає"
+CRUD_Module .> Schema_Update : "Приймає"
+CRUD_Module .> Schema_Read : "Повертає"
+
 @enduml

@@ -11,7 +11,9 @@ from database import SessionLocal
 app = FastAPI() 
 
 origins = [
-    "http://localhost:5173", # <-- "Адрес" вашего фронтенда (Vite/React)
+    "http://localhost:5173",                       # Для локальної розробки
+    "https://task-man-project-omega.vercel.app",   # ВАШ ЖИВИЙ САЙТ
+    "https://task-man-project-omega.vercel.app/" # <-- "Адрес" вашего фронтенда (Vite/React)
 ]
 
 app.add_middleware(
