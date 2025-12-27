@@ -33,9 +33,6 @@ Static Analysis: Automatic style and error checking using Ruff.
 
 Coverage Analysis: Code coverage monitoring (98% Backend, 90% Frontend).
 
-📸 Screenshots
-
-(You can insert screenshots of your tests or the site itself here)
 
 📦 How to Run Locally
 
